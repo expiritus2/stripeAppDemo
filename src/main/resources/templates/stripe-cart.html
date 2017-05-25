@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Stripe App Demo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+<div class="container" style="margin-bottom: 30px;">
+    <div class="text-center">
+        <h2 style="margin-top: 30px; margin-bottom: 30px;">Stripe App Demo</h2>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-offset-1">
+            <table class="table table-bordered table-hover table-condensed" style="margin-bottom: 30px;">
+                <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Image</th>
+                    <th>Product Description</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="prod : ${productList}">
+                    <td th:text="${prod.name}"></td>
+                    <td>
+                        <img th:src="'/'+${prod.name}+'.png'" alt="" class="img-responsive" style="width: 200px;"/>
+                    </td>
+                    <td th:text="${prod.description}"></td>
+                    <td th:text="${#numbers.formatDecimal(prod.price, 1, 2)}"></td>
+                    <td>
+                        <a th:href="@{/stripe/addToCart(id=${prod.id})}" class="btn btn-sm btn-primary">Add to Cart</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Product</th>
+                    <th><span style="margin-left: 40px;">Quantity</span></th>
+                    <th class="text-center">Price</th>
+                    <th class="text-center">SubTotal</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${cartItemList}">
+                    <td class="col-sm-7">
+                        <div class="media">
+                            <div class="media-body">
+                                <h4 class="media-heading">
+                                    <a href="#" th:text="${item.product.name}">Product Name</a>
+                                </h4>
+                                <span>State: </span><span class="text-success"><strong>In Stock</strong></span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="col-sm-2" style="text-align: center;">
+                        <form th:action="@{/stripe/updateCart}" method="POST">
+                            <input type="hidden" name="id" th:value="${item.id}"/>
+                            <button th:id="'update-'+${item.id}" type="submit" class="btn btn-sm btn-info pull-left"
+                                    style="height: 30px; display: none;">update
+                            </button>
+
+                            <input class="item-qty" th:id="'qty-'+${item.id}" name="qty" th:value="${item.qty}"
+                                   style="display: inline-block; width: 50px;"/>
+                        </form>
+                    </td>
+                    <td class="col-sm-1 text-center"><strong th:text="${item.product.price}" th:id="'price-'+${item.id}">$4.81</strong></td>
+                    <td class="col-sm-1 text-center"><strong class="subtotal" th:text="${item.subTotal}" th:id="'subtotal-'+${item.id}">$4.81</strong></td>
+                    <td class="col-sm-1">
+                        <a type="button" class="btn btn-warning btn-sm" th:href="@{/stripe/remove(id=${item.id})}">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><h5>Total</h5></td>
+                    <td class="text-right"><h5><strong id="total" th:text="${total}">$1234.12</strong></h5></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
