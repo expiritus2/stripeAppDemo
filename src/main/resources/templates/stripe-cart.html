@@ -4,6 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Stripe App Demo</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
 <div class="container" style="margin-bottom: 30px;">
@@ -87,6 +88,37 @@
                 </tr>
                 </tbody>
             </table>
+            <h3>Checkout Payment</h3>
+            <span th:if="${checkoutPaySuccess}"><h3 class="bg-info">Payment Successful!</h3></span>
+            <form action="/stripe/checkoutPay" method="POST">
+                <script
+                        src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="pk_test_4IJVw3xzctRro1iC7qn6HuQJ"
+                        data-amount="999"
+                        data-name="Demo Site"
+                        data-description="Widget"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                        data-locale="auto">
+                </script>
+            </form>
+            <br/><br/>
+            <h3>Elements Payment</h3>
+            <span th:if="${elementsPaySuccess}"><h3 class="bg-info">Payment Successful!</h3></span>
+            <form action="/stripe/elementsPay" method="post" id="payment-form">
+                <div class="form-row">
+                    <label for="card-element">
+                        Credit or debit card
+                    </label>
+                    <div id="card-element">
+                        <!-- a Stripe Element will be inserted here. -->
+                    </div>
+
+                    <!-- Used to display Element errors -->
+                    <div id="card-errors" role="alert"></div>
+                </div>
+
+                <button>Submit Payment</button>
+            </form>
         </div>
     </div>
 </div>
@@ -95,5 +127,9 @@
         integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
         crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://js.stripe.com/v2/"></script>
+<script src="https://js.stripe.com/v3/"></script>
+<script src="/stripe.js"></script>
+<script src="/main.js"></script>
 </body>
 </html>
